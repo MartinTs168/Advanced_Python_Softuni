@@ -3,7 +3,7 @@ odd_set = set()
 
 for row in range(1, int(input()) + 1):
     name = input()
-    name_value = int(sum([ord(z) for z in name]) / row)
+    name_value = sum(ord(z) for z in name) // row
     if name_value % 2 == 0:
         even_set.add(name_value)
     else:
