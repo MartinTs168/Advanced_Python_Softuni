@@ -19,10 +19,10 @@ for row in range(rows):
 
 final_message = ""
 player_won = False
+matrix_copy = copy.deepcopy(matrix)
 
 commands = list(input())
 for command in commands:
-    matrix_copy = copy.deepcopy(matrix)
     r, c = player_pos[0] + directions[command][0], player_pos[1] + directions[command][1]
     if r < 0 or r >= rows or c < 0 or c >= cols:
         final_message = f"won: {player_pos[0]} {player_pos[1]}"
