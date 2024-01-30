@@ -14,8 +14,11 @@ while line != "Search":
 
 line = input()
 while line != "Remove":
-    searched = line
-    print(numbers_dictionary[searched])
+    try:
+        searched = line
+        print(numbers_dictionary[searched])
+    except KeyError:
+        print("Number does not exist in dictionary")
 
     line = input()
 
