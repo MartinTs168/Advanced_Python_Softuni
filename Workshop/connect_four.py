@@ -21,8 +21,8 @@ DIRECTION_MAPPER = {
 
 
 def print_board(cur_board):
-    for row in cur_board:
-        print(row)
+    for cur_row in cur_board:
+        print(cur_row)
 
 
 def validate_column_choice(cur_column):
