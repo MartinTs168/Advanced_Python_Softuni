@@ -1,7 +1,7 @@
 import os
 
 
-def save_extensions(dir_name):
+def save_extensions(dir_name, first_level=False):
     for filename in os.listdir(dir_name):
         file = os.path.join(dir_name, filename)
 
@@ -9,11 +9,11 @@ def save_extensions(dir_name):
             extension = filename.split('.')[-1]
 
             extensions[extension] = extensions.get(extension, []) + [filename]
-        elif os.path.isdir(file):
-            save_extensions(file)
+        elif os.path.isdir(file) and not first_level:
+            save_extensions(file, first_level=True)
 
 
-directory = input()
+directory = input("Enter a directory: ")
 extensions = {}  # {py: [python.py]}
 result = []
 try:
@@ -30,6 +30,3 @@ for extension, files in extensions:
 
 with open("files/report.txt", "w") as report:
     report.write("\n".join(result))
-
-
-
