@@ -23,7 +23,7 @@ class Section:
         except StopIteration:
             return f"Could not find task with the name {task_name}"
 
-        task.complete = True
+        task.completed = True
         return f"Completed task {task_name}"
 
     def clean_section(self):
@@ -36,9 +36,10 @@ class Section:
 
         return f"Cleared {cleaned_tasks} tasks."
 
-    def view_section(self):
-        task_with_details = "\n".join(task.details() for task in self.tasks)
-        return f"Section {self.name}:\n{task_with_details}"
+    def view_section(self) -> str:
+        tasks_with_details = "\n".join(t.details() for t in self.tasks)
+        return f"Section {self.name}:\n" \
+               f"{tasks_with_details}"
 
 
 task = Task("Make bed", "27/05/2020")
