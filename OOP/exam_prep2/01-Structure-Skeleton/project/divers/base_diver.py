@@ -9,7 +9,7 @@ class BaseDiver(ABC):
         self.oxygen_level = oxygen_level
         self.catch: List[BaseFish] = []
         self.__competition_points = 0.0
-        self.has_health_issues = False
+        self.has_health_issue = False
 
     @property
     def competition_points(self) -> float:
@@ -59,7 +59,7 @@ class BaseDiver(ABC):
             self.catch.append(fish)
 
     def update_health_status(self):
-        self.has_health_issues = not self.has_health_issues
+        self.has_health_issue = not self.has_health_issue
 
     def __str__(self):
         return f"{self.type}: [Name: {self.name}, Oxygen level left: {self.oxygen_level}," + \

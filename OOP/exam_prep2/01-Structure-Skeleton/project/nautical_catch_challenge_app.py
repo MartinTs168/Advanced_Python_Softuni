@@ -61,10 +61,10 @@ class NauticalCatchChallengeApp:
 
         message = ''
 
-        if diver.has_health_issues:
-            message = f"{diver_name} will not be allowed to dive, due to health issues."
+        if diver.has_health_issue:
+            return f"{diver_name} will not be allowed to dive, due to health issues."
 
-        elif diver.oxygen_level < fish.time_to_catch:
+        if diver.oxygen_level < fish.time_to_catch:
             diver.miss(fish.time_to_catch)
             message = f"{diver_name} missed a good {fish_name}."
 
@@ -73,7 +73,7 @@ class NauticalCatchChallengeApp:
                 diver.hit(fish)
                 message = f"{diver_name} hits a {fish.points}pt. {fish_name}."
             else:
-                diver.miss(fish)
+                diver.miss(fish.time_to_catch)
                 message = f"{diver_name} missed a good {fish_name}."
 
         elif diver.oxygen_level > fish.time_to_catch:
@@ -81,15 +81,15 @@ class NauticalCatchChallengeApp:
             message = f"{diver_name} hits a {fish.points}pt. {fish_name}."
 
         if diver.oxygen_level == 0:
-            diver.has_health_issues = True
+            diver.update_health_status()
 
         return message
 
     def health_recovery(self):
         counter = 0
         for diver in self.divers:
-            if diver.has_health_issues:
-                diver.update_health_status()
+            if diver.has_health_issue:
+                diver.has_health_issue = False
                 diver.renew_oxy()
                 counter += 1
         return f"Divers recovered: {counter}"
@@ -100,7 +100,7 @@ class NauticalCatchChallengeApp:
             "\n".join(f.fish_details() for f in diver.catch)
 
     def competition_statistics(self):
-        healthy_divers = [d for d in self.divers if not d.has_health_issues]
+        healthy_divers = [d for d in self.divers if not d.has_health_issue]
         healthy_divers.sort(key=lambda x: (-x.competition_points, -len(x.catch), x.name))
 
         return f"**Nautical Catch Challenge Statistics**\n" + \
