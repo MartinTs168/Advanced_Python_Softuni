@@ -1,4 +1,4 @@
-from typing import List
+
 
 from project.campaigns.base_campaign import BaseCampaign
 from project.campaigns.high_budget_campaign import HighBudgetCampaign
@@ -20,8 +20,8 @@ class InfluencerManagerApp:
     }
 
     def __init__(self):
-        self.influencers: List[BaseInfluencer] = []
-        self.campaigns: List[BaseCampaign] = []
+        self.influencers = []
+        self.campaigns  = []
 
     def register_influencer(self, influencer_type: str, username: str, followers: int, engagement_rate: float):
         try:
@@ -37,15 +37,15 @@ class InfluencerManagerApp:
 
     def create_campaign(self, campaign_type: str, campaign_id: int, brand: str, required_engagement: float):
         try:
-            campaign = self.__VALID_CAMPAIGN_TYPES[campaign_type](campaign_id, brand, required_engagement)
+            if campaign_type not in self.__VALID_CAMPAIGN_TYPES:
+                return f"{campaign_type} is not a valid campaign type."
             next(filter(lambda x: x.campaign_id == campaign_id, self.campaigns))
-        except KeyError:
-            return f"{campaign_type} is not a valid campaign type."
         except StopIteration:
+            campaign = self.__VALID_CAMPAIGN_TYPES[campaign_type](campaign_id, brand, required_engagement)
             self.campaigns.append(campaign)
             return f"Campaign ID {campaign_id} for {brand} is successfully created as a {campaign_type}."
-        except ValueError:
-            return f"Campaign ID {campaign_id} has already been created."
+
+        return f"Campaign ID {campaign_id} has already been created."
 
     def participate_in_campaign(self, influencer_username: str, campaign_id: int):
         try:
@@ -62,7 +62,7 @@ class InfluencerManagerApp:
             return f"Influencer '{influencer_username}' does not meet the eligibility criteria for the campaign with ID {campaign_id}."
 
         payment = influencer.calculate_payment(campaign)
-        if payment > 0:
+        if payment > 0.0:
             campaign.approved_influencers.append(influencer)
             campaign.budget -= payment
             influencer.campaigns_participated.append(campaign)
@@ -90,6 +90,6 @@ class InfluencerManagerApp:
         campaign_followers_dict = self.calculate_total_reached_followers()
         sorted_campaigns = sorted(self.campaigns, key=lambda x: (len(x.approved_influencers), -x.budget))
         campaigns_info = [
-            f"  * Brand: {c.brand}, Total influencers: {len(c.approved_influencers)}, Total budget: ${c.budget:.2f}, Total reached followers: {campaign_followers_dict[c]}"
-            for c in sorted_campaigns]
-        return f"$$ Campaign Statistics $$\n{'\n'.join(campaigns_info)}"
+            f"  * Brand: {c.brand}, Total influencers: {len(c.approved_influencers)}, Total budget: ${c.budget:.2f}, Total reached followers: {campaign_followers_dict[c]}" for c in sorted_campaigns]
+        campaigns_info = '\n'.join(campaigns_info)
+        return f"$$ Campaign Statistics $$\n{campaigns_info}"

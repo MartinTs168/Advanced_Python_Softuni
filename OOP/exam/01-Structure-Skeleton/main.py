@@ -37,3 +37,5 @@ print(manager.participate_in_campaign("EmilyTurner", 3))
 print(manager.influencer_campaign_report("JohnDoe"))
 print(manager.influencer_campaign_report("JaneSmith"))
 print(manager.campaign_statistics())
+
+#print(manager.register_influencer("PremiumInfluencer", "JohnDoe", 1, 10))
